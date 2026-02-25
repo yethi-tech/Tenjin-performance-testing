@@ -34,7 +34,6 @@ spec:
         labels:
           app: {{ .Release.Name }}-jmeter-worker
       spec:
-        volumeName: {{ .Release.Name }}-jmeter-worker
         accessModes:
           - ReadWriteOnce
         resources:
