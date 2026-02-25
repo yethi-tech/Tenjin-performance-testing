@@ -29,7 +29,7 @@ spec:
               mountPath: /etc/telegraf/telegraf.conf
               subPath: telegraf.conf
             - name: cri-socket
-              mountPath: /var/run/crio/crio.sock
+              mountPath: /run/containerd/containerd.sock
               readOnly: true
           env:
             - name: HOSTNAME
@@ -53,7 +53,7 @@ spec:
                 path: telegraf.conf
         - name: cri-socket
           hostPath:
-            path: /var/run/crio/crio.sock
+            path: /run/containerd/containerd.sock
             type: Socket
       tolerations:
         - operator: "Exists"

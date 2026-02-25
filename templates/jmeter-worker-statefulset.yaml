@@ -18,7 +18,6 @@ spec:
       containers:
         - name: jmeter-worker
           image: {{ .Values.Workers.image | default "yethitech/performance-testing:3-2-25" }}
-          imagePullPolicy: Always
           env:
             - name: HEAP
               value: {{ .Values.Workers.heap | default "-Xms1g -Xmx4g" }}
@@ -35,6 +34,7 @@ spec:
         labels:
           app: {{ .Release.Name }}-jmeter-worker
       spec:
+        volumeName: {{ .Release.Name }}-jmeter-worker
         accessModes:
           - ReadWriteOnce
         resources:

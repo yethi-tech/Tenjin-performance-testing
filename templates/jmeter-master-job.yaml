@@ -18,7 +18,6 @@ spec:
           containers:
             - name: jmeter-master
               image: {{ .Values.Master.image | default "yethitech/performance-testing:kube-3-2-25" }}
-              imagePullPolicy: Always
               env:
                 - name: HEAP
                   value: {{ .Values.Master.heap | default "-Xms1g -Xmx4g" }}
@@ -89,6 +88,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}-jmeter-master
 spec:
+  volumeName: {{ .Release.Name }}-jmeter-master
   accessModes:
     - ReadWriteOnce
   resources:
