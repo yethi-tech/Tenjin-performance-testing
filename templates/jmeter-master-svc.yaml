@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-jmeter-master
+  name: {{ .Release.Name }}-tenjin-pulse-master
   labels:
-    app: {{ .Release.Name }}-jmeter-master
+    app: {{ .Release.Name }}-tenjin-pulse-master
 spec:
   type: {{ .Values.Master.service.type | default "ClusterIP" }}  # Ensure this is set in values.yaml
   selector:
-    app: {{ .Release.Name }}-jmeter-master
+    app: {{ .Release.Name }}-tenjin-pulse-master
   ports:
     - name: rmi
       port: 1099

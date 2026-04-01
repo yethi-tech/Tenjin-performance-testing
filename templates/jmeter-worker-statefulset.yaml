@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}-jmeter-worker
+  name: {{ .Release.Name }}-tenjin-pulse-worker
   labels:
-    name: {{ .Release.Name }}-jmeter-worker
+    name: {{ .Release.Name }}-tenjin-pulse-worker
 spec:
-  serviceName: {{ .Release.Name }}-jmeter-worker
+  serviceName: {{ .Release.Name }}-tenjin-pulse-worker
   replicas: {{ .Values.Workers.replicaCount | default "3" }} # Number of JMeter workers
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-jmeter-worker
+      app: {{ .Release.Name }}-tenjin-pulse-worker
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-jmeter-worker
+        app: {{ .Release.Name }}-tenjin-pulse-worker
     spec:
       containers:
-        - name: jmeter-worker
+        - name: tenjin-pulse-worker
           image: {{ .Values.Workers.image | default "yethitech/performance-testing:3-2-25" }}
           env:
             - name: HEAP
@@ -32,7 +32,7 @@ spec:
     - metadata:
         name: worker-data
         labels:
-          app: {{ .Release.Name }}-jmeter-worker
+          app: {{ .Release.Name }}-tenjin-pulse-worker
       spec:
         accessModes:
           - ReadWriteOnce

@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-jmeter-vts
+  name: {{ .Release.Name }}-tenjin-pulse-vts
   labels:
-    name: {{ .Release.Name }}-jmeter-vts
+    name: {{ .Release.Name }}-tenjin-pulse-vts
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-jmeter-vts
+      app: {{ .Release.Name }}-tenjin-pulse-vts
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-jmeter-vts
+        app: {{ .Release.Name }}-tenjin-pulse-vts
     spec:
       containers:
         - name: jmeter-vts

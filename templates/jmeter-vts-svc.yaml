@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-jmeter-vts
+  name: {{ .Release.Name }}-tenjin-pulse-vts
   labels:
-    app: {{ .Release.Name }}-jmeter-vts
+    app: {{ .Release.Name }}-tenjin-pulse-vts
 spec:
   type: {{ .Values.jmeterVts.service.type | default "ClusterIP" }}
   ports:
     - port: 8080
       targetPort: 8080
   selector:
-    app: {{ .Release.Name }}-jmeter-vts
+    app: {{ .Release.Name }}-tenjin-pulse-vts
