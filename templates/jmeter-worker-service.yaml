@@ -17,3 +17,7 @@ spec:
       port: 60000
       targetPort: 60000
       protocol: TCP
+    - name: rmi-callback
+      port: 60001
+      targetPort: 60001
+      protocol: TCP

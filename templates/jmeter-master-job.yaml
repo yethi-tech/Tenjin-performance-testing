@@ -24,6 +24,7 @@ spec:
               ports:
                 - containerPort: 1099
                 - containerPort: 60000
+                - containerPort: 60001
               volumeMounts:
                 - name: jmeter-data-volume
                   mountPath: /csv
@@ -68,7 +69,7 @@ spec:
                     -r \
                     -Dserver.rmi.ssl.disable=true \
                     -Jserver.rmi.localport=60000 \
-                    -Jclient.rmi.localport=1099 \
+                    -Jclient.rmi.localport=60001 \
                     -e -o /csv/reports.html \
                     -l /csv/results.jtl \
                     -j /csv/results.log
