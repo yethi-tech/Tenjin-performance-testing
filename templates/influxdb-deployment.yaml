@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: influxdb
-          image: {{ .Values.InfluxDB.image | default "influxdb:2.7" }}
+          image: {{ .Values.InfluxDB.image | default "influxdb:2.7.11" }}
           ports:
             - containerPort: 8086
           resources:

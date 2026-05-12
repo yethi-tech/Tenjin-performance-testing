@@ -31,6 +31,7 @@ Grafana:
     size: 10Gi # Size of the persistent volume
     storageClassName: standard # Storage class for PVC
 InfluxDB:
+  image: "influxdb:2.7.11"
   username: "admin" # InfluxDB admin username
   password: "Admin@123" # InfluxDB admin password
   org: "jmeter" # Organization name for InfluxDB
