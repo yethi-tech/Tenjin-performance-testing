@@ -3,12 +3,22 @@ entries:
   Tenjin-performance-testing:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-04-01T12:07:26.4291818+05:30"
+    created: "2026-06-02T17:26:37.04801+05:30"
     description: A Helm chart for Kubernetes
-    digest: 6de0ba5ee091b4dfb2f75ad85b9e60062192699120a8d0fb514fd28cfa371e5d
+    digest: ebd6f661a3018788521f4148d858e8dde139f6f2e01d18bc31fe52da431584a0
+    name: Tenjin-performance-testing
+    type: application
+    urls:
+    - https://yethi-tech.github.io/Tenjin-performance-testing/version-0.1.1/Tenjin-performance-testing-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-02T17:26:37.0458877+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 91f5b004eeb3a2429a5950a823bd0f3d0fd46fa734c3fe6b9e59ea728d318ff2
     name: Tenjin-performance-testing
     type: application
     urls:
     - https://yethi-tech.github.io/Tenjin-performance-testing/Tenjin-performance-testing-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-01T12:07:26.4276359+05:30"
+generated: "2026-06-02T17:26:37.0437663+05:30"
