@@ -3,31 +3,39 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-tenjin-pulse-master
   labels:
-    name: {{ .Release.Name }}-tenjin-pulse-master
+    app: {{ .Release.Name }}-tenjin-pulse-master
+
 spec:
-  schedule: "5 5 5 5 5"  # <-- Update as needed
+  schedule: "5 5 5 5 5"   # change as needed
   jobTemplate:
     spec:
       template:
         metadata:
           labels:
             app: {{ .Release.Name }}-tenjin-pulse-master
+
         spec:
           serviceAccountName: {{ .Release.Name }}-tenjin-pulse-master-sa
           restartPolicy: Never
+
           containers:
             - name: tenjin-pulse-master
               image: {{ .Values.Master.image | default "yethitech/performance-testing:kube-3-2-25" }}
+
               env:
                 - name: HEAP
                   value: {{ .Values.Master.heap | default "-Xms1g -Xmx4g" }}
+
               ports:
                 - containerPort: 1099
                 - containerPort: 60000
                 - containerPort: 60001
+
               volumeMounts:
                 - name: jmeter-data-volume
                   mountPath: /csv
+                  subPath: {{ .Values.Master.persistence.subPath | default "backend/tenjinpt-prod-master-pv" }}
+
               resources:
                 requests:
                   memory: {{ .Values.Master.resources.requests.memory | default "5Gi" }}
@@ -35,9 +43,11 @@ spec:
                 limits:
                   memory: {{ .Values.Master.resources.limits.memory | default "5Gi" }}
                   cpu: {{ .Values.Master.resources.limits.cpu | default "3" }}
+
               command:
                 - /bin/sh
                 - -c
+
               args:
                 - |
                   set -x
@@ -75,24 +85,25 @@ spec:
                     -j /csv/results.log
 
                   echo "JMeter test execution completed."
+
           volumes:
             - name: jmeter-data-volume
               persistentVolumeClaim:
-                claimName: {{ .Release.Name }}-tenjin-pulse-master-pv
-
+                claimName: {{ .Release.Name }}-tenjin-pulse-master-pvc
 ---
-# PersistentVolumeClaim definition (dynamic provisioning)
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-tenjin-pulse-master-pv
+  name: {{ .Release.Name }}-tenjin-pulse-master-pvc
   labels:
     app: {{ .Release.Name }}-tenjin-pulse-master
+
 spec:
-  volumeName: {{ .Release.Name }}-tenjin-pulse-master
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
+
   resources:
     requests:
-      storage: {{ .Values.Master.persistence.size | default "6Gi" }}  # Templated size from values.yaml
-  storageClassName: {{ .Values.Master.persistence.storageClassName | default "standard" }}  # Templated storage class
+      storage: {{ .Values.Master.persistence.size | default "6Gi" }}
+
+  storageClassName: {{ .Values.Master.persistence.storageClassName | default "efs-sc" }}

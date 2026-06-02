@@ -3,47 +3,66 @@ kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}-tenjin-pulse-worker
   labels:
-    name: {{ .Release.Name }}-tenjin-pulse-worker
+    app: {{ .Release.Name }}-tenjin-pulse-worker
+
 spec:
   serviceName: {{ .Release.Name }}-tenjin-pulse-worker
-  replicas: {{ .Values.Workers.replicaCount | default "3" }} # Number of JMeter workers
+  replicas: {{ .Values.Workers.replicaCount | default 3 }}
+
   selector:
     matchLabels:
       app: {{ .Release.Name }}-tenjin-pulse-worker
+
   template:
     metadata:
       labels:
         app: {{ .Release.Name }}-tenjin-pulse-worker
+
     spec:
       containers:
         - name: tenjin-pulse-worker
-          image: {{ .Values.Workers.image | default "yethitech/performance-testing:3-2-25" }}
+          image: {{ .Values.Workers.image }}
+
           env:
             - name: HEAP
-              value: {{ .Values.Workers.heap | default "-Xms1g -Xmx4g" }}
+              value: {{ .Values.Workers.heap }}
+
           ports:
-            - containerPort: 1099 # JMeter RMI port
-            - containerPort: 60000 # JMeter worker communication
+            - containerPort: 1099
+            - containerPort: 60000
             - containerPort: 60001
+
           volumeMounts:
             - name: worker-data
-              mountPath: /csv  # Mounting CSV files from PV
+              mountPath: /csv
+
+          command:
+            - /bin/sh
+            - -c
+
           args:
-            - "-s"
-            - "-Dserver.rmi.ssl.disable=true"
-            - "-Dserver_port=1099"
-            - "-Dserver.rmi.localport=60000"
-            - "-Dclient.rmi.localport=60001"
+            - |
+              set -x
+              echo "Starting JMeter Worker $HOSTNAME"
+
+              jmeter -s \
+                -Dserver.rmi.ssl.disable=true \
+                -Dserver_port=1099 \
+                -Dserver.rmi.localport=60000 \
+                -Dclient.rmi.localport=60001
 
   volumeClaimTemplates:
     - metadata:
         name: worker-data
         labels:
           app: {{ .Release.Name }}-tenjin-pulse-worker
+
       spec:
         accessModes:
-          - ReadWriteOnce
+          - ReadWriteMany
+
+        storageClassName: {{ .Values.Workers.persistence.storageClassName | default "efs-sc" }}
+
         resources:
           requests:
-            storage: {{ .Values.Workers.persistence.size | default "5Gi" }} # Size from values.yaml
-        storageClassName: {{ .Values.Workers.persistence.storageClassName | default "standard" }} # Storage class from values.yaml
+            storage: {{ .Values.Workers.persistence.size | default "5Gi" }}

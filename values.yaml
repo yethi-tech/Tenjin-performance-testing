@@ -1,50 +1,57 @@
 Workers:
-  replicaCount: 3 # Number of JMeter slave replicas
-  image: "yethitech/performance-testing:3-2-25" # Docker image for JMeter slaves
-  heap: "-Xms1g -Xmx4g" # JVM heap size for JMeter slaves
+  replicaCount: 3
+  image: "yethitech/performance-testing:3-2-25"
+  heap: "-Xms1g -Xmx4g"
   persistence:
-    size: "5Gi" # Storage size for each slave replica
-    storageClassName: "standard" # Storage class for Persistent Volume Claims
+    size: "5Gi"
+    storageClassName: "efs-sc"
+    subPath: backend/tenjinpt-workers
+
 Master:
-  image: "yethitech/performance-testing:kube-3-2-25" # Docker image for JMeter master
-  heap: "-Xms1g -Xmx4g" # JVM heap size for JMeter master
+  image: "yethitech/performance-testing:kube-3-2-25"
+  heap: "-Xms1g -Xmx4g"
+
   resources:
     requests:
-      memory: "5Gi" # Memory request for JMeter master
-      cpu: "1" # CPU request for JMeter master
+      memory: "5Gi"
+      cpu: "1"
     limits:
-      memory: "5Gi" # Memory limit for JMeter master
-      cpu: "3" # CPU limit for JMeter master
+      memory: "5Gi"
+      cpu: "3"
+
   service:
     type: ClusterIP
+
   persistence:
-    size: "6Gi" # Size for PVC
-    storageClassName: "standard" # Storage class for PVC
+    size: "6Gi"
+    storageClassName: "efs-sc"
+    subPath: backend/tenjinpt-prod-master-pv
+
 Grafana:
-  username: admin # Grafana admin username
-  password: admin123 # Grafana admin password
+  username: admin
+  password: admin123
   service:
-    type: NodePort # Options: ClusterIP, NodePort, LoadBalancer
-    port: 3000 # External port for accessing Grafana
+    type: NodePort
+    port: 3000
   persistence:
     enabled: true
-    size: 10Gi # Size of the persistent volume
-    storageClassName: standard # Storage class for PVC
+    size: 10Gi
+    storageClassName: standard
+
 InfluxDB:
   image: "influxdb:2.7.11"
-  username: "admin" # InfluxDB admin username
-  password: "Admin@123" # InfluxDB admin password
-  org: "jmeter" # Organization name for InfluxDB
+  username: "admin"
+  password: "Admin@123"
+  org: "jmeter"
   bucket: "jmeter"
-  token: "YOUR_INFLUXDB_TOKEN_HERE"  # Bucket name for storing data
-  retention: "30d" # Data retention period
+  token: "YOUR_INFLUXDB_TOKEN_HERE"
+  retention: "30d"
   persistence:
     size: "30Gi"
     storageClassName: "standard"
   service:
-    type: NodePort # or NodePort / LoadBalancer
+    type: NodePort
 
 jmeterVts:
   service:
-    type: NodePort  # or NodePort / LoadBalancer
-
+    type: NodePort

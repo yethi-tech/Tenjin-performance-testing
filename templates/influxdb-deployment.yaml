@@ -3,35 +3,44 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-influxdb
   labels:
-    name: {{ .Release.Name }}-influxdb
+    app: {{ .Release.Name }}-influxdb
+
 spec:
   replicas: 1
+
   selector:
     matchLabels:
       app: {{ .Release.Name }}-influxdb
+
   template:
     metadata:
       labels:
         app: {{ .Release.Name }}-influxdb
+
     spec:
       containers:
         - name: influxdb
           image: {{ .Values.InfluxDB.image | default "influxdb:2.7.11" }}
+
           ports:
             - containerPort: 8086
+
           resources:
             requests:
               memory: "4Gi"
               cpu: "1250m"
             limits:
               memory: "4Gi"
-              cpu:  "1500m"
+              cpu: "1500m"
+
           volumeMounts:
             - name: influxdb-storage
               mountPath: /var/lib/influxdb2
+
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-influxdb-config
+
       volumes:
         - name: influxdb-storage
           persistentVolumeClaim:
@@ -43,14 +52,13 @@ metadata:
   name: {{ .Release.Name }}-influxdb-pvc
   labels:
     app: {{ .Release.Name }}-influxdb
+
 spec:
-  volumeName: {{ .Release.Name }}-influxdb
   accessModes:
     - ReadWriteOnce
+
+  storageClassName: {{ default "gp3" .Values.InfluxDB.persistence.storageClassName }}
+
   resources:
     requests:
       storage: {{ .Values.InfluxDB.persistence.size | default "30Gi" }}
-  storageClassName: {{ .Values.InfluxDB.persistence.storageClassName | default "standard" }}
-  selector:
-    matchLabels:
-      app: {{ .Release.Name }}-influxdb
