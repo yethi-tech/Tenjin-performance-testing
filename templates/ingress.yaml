@@ -7,12 +7,12 @@ spec:
 
   tls:
   - hosts:
-    - influx.tenjinonline.com
-    - vts.tenjinonline.com
+    - pt-influx.yethi.in
+    - pt-vts.yethi.in
     secretName: tenjin-tls
 
   rules:
-  - host: influx.tenjinonline.com
+  - host: pt-influx.yethi.in
     http:
       paths:
       - path: /
@@ -23,7 +23,7 @@ spec:
             port:
               number: 8086
 
-  - host: vts.tenjinonline.com
+  - host: pt-vts.yethi.in
     http:
       paths:
       - path: /
