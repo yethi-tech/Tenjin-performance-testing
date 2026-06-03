@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+spec:
+  ingressClassName: nginx
+
+  tls:
+  - hosts:
+    - influx.tenjinonline.com
+    - vts.tenjinonline.com
+    secretName: tenjin-tls
+
+  rules:
+  - host: influx.tenjinonline.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-influxdb
+            port:
+              number: 8086
+
+  - host: vts.tenjinonline.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-tenjin-pulse-vts
+            port:
+              number: 8080
