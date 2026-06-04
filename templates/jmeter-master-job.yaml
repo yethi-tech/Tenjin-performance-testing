@@ -33,8 +33,7 @@ spec:
 
               volumeMounts:
                 - name: jmeter-data-volume
-                  mountPath: /csv
-                  subPath: {{ .Values.Master.persistence.subPath | default "backend/tenjinpt-prod-master-pv" }}
+                  mountPath: /root/tenjinpt-master-pv
 
               resources:
                 requests:
@@ -74,15 +73,15 @@ spec:
                     exit 1
                   fi
 
-                  jmeter -n -t /csv/Tenjin.jmx \
+                  jmeter -n -t /root/tenjinpt-master-pv/Tenjin.jmx \
                     -R $SLAVE_IPS \
                     -r \
                     -Dserver.rmi.ssl.disable=true \
                     -Jserver.rmi.localport=60000 \
                     -Jclient.rmi.localport=60001 \
-                    -e -o /csv/reports.html \
-                    -l /csv/results.jtl \
-                    -j /csv/results.log
+                    -e -o /root/tenjinpt-master-pv/reports.html \
+                    -l /root/tenjinpt-master-pv/results.jtl \
+                    -j /root/tenjinpt-master-pv/results.log
 
                   echo "JMeter test execution completed."
 
